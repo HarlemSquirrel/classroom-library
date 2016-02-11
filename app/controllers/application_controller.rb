@@ -30,7 +30,7 @@ class ApplicationController < Sinatra::Base
       email: params[:email],
       password: params[:password]
     )
-    #binding.pry
+
     if user.save
       session[:id] = user.id
       redirect '/'
@@ -48,7 +48,6 @@ class ApplicationController < Sinatra::Base
     user = User.find_by(:username => params[:username])
     if user && user.authenticate(params[:password])
         session[:id] = user.id
-        #binding.pry
         redirect '/'
     else
         redirect '/login'
@@ -60,6 +59,21 @@ class ApplicationController < Sinatra::Base
     redirect '/login'
   end
 
+
+  ########################## books #######################
+  get '/books' do
+    redirect to '/login' unless Helpers.is_logged_in?(session)
+
+    @user = User.find(session[:id])
+    @session = session
+    @books = Book.all
+    erb :'books/books'
+  end
+
+  get '/books/new' do
+    redirect to '/login' unless Helpers.is_logged_in?(session)
+    erb :'books/new'
+  end
 end
 
 
