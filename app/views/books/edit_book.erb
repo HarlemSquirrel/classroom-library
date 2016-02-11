@@ -1,12 +1,51 @@
 <% if Helpers.is_logged_in?(@session) %>
   <div class="edit_book">
-    <h2><%= @user.username %> editing...</h2>
+    <h2>Edit Book</h2>
+    <form class="create_book" action="/books/<%=@book.id%>" method="post">
+      <input type="hidden" name="_method" value="patch">
+      <label for="title">Book Title:</label>
+      <input type="text" name="title" value="<%=@book.title%>" required><br>
+
+      <label for="select_author">Pick an Author:</label>
+      <select class="select_author" name="select_author" onchange='check_author_dropdown(this.value)'>
+        <option value="NEW">NEW AUTHOR</option>
+        <% @authors.each do |author| %>
+          <option value="<%= author.name %>" <%="selected" if author == @book.author%>><%= author.name %></option>
+        <% end %>
+      </select>
+      <input id="new_author" type="text" name="new_author" placeholder="or create a new author..."><br>
+
+      <label for="select_genre">Pick a Genre:</label>
+      <select class="select_genre" name="select_genre" onchange='check_genre_dropdown(this.value)'>
+        <option value="NEW">NEW GENRE</option>
+        <% @genres.each do |genre| %>
+          <option value="<%= genre.name %>" <%="selected" if genre == @book.genre%>><%= genre.name %></option>
+        <% end %>
+
+      </select>
+      <input id="new_genre" type="text" name="new_genre" placeholder="or create a new genre..."><br>
+
+      <input type="submit" name="submit" value="Update">
+    </form>
   </div>
 
-  <div class="edit_book">
-    edit a book
-  </div>
+  <script type="text/javascript">
+    function check_author_dropdown(val){
+      var element=document.getElementById('new_author');
+    if(val==="NEW")
+      element.style.display='inline';
+    else
+      element.style.display='none';
+    }
 
+    function check_genre_dropdown(val){
+      var element=document.getElementById('new_genre');
+    if(val==="NEW")
+      element.style.display='inline';
+    else
+      element.style.display='none';
+    }
+  </script>
 
 <% else %>
   <a href="/">Home</a> <a href="/login">Log In</a> <a href="/signup">Sign Up</a>

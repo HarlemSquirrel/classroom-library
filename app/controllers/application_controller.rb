@@ -80,7 +80,7 @@ class ApplicationController < Sinatra::Base
 
   get '/books/new' do
     redirect to '/login' unless Helpers.is_logged_in?(session)
-
+    @user = User.find(session[:id])
     @authors = Author.all
     @genres = Genre.all
     @session = session
@@ -123,6 +123,22 @@ class ApplicationController < Sinatra::Base
     @book = Book.find(params[:id])
     @user = User.find(session[:id])
     erb :'books/show_book'
+  end
+
+  get '/books/:id/edit' do
+    redirect to '/login' unless Helpers.is_logged_in?(session)
+    @session = session
+    @book = Book.find(params[:id])
+    @user = User.find(session[:id])
+    @authors = Author.all
+    @genres = Genre.all
+    erb :'books/edit_book'
+  end
+
+  patch '/books/:id' do
+    # update the book
+    # redirect to show page
+    redirect to "/books/#{book.id}"
   end
 end
 
