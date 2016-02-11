@@ -1,0 +1,13 @@
+<% if Helpers.is_logged_in?(@session) %>
+  <div class="edit_book">
+    <h2><%= @user.username %> editing...</h2>
+  </div>
+
+  <div class="edit_book">
+    edit a book
+  </div>
+
+
+<% else %>
+  <a href="/">Home</a> <a href="/login">Log In</a> <a href="/signup">Sign Up</a>
+<% end %>

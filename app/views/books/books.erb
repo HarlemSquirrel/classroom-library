@@ -1,30 +1,24 @@
 <% if Helpers.is_logged_in?(@session) %>
-  <div class="welcome">
-    <h2>Welcome, <%= @user.username %>!</h2>
-  </div>
-
   <div class="books">
-    <h3>~ Your Books ~</h3>
+    <h2>~ Your Books ~</h2>
+    <a href="/books/new"><h3>Add a New Book</h3></a>
     <% @user.books.each do |book| %>
-      <h3><%= book.title %></h3>
-      <p>
-        Author:<%= book.author.name %><br>
-        Genre:<%= book.genre.name %><br>
-        Status:
-        <% if book.on_loaned_to == ""; %>
-          <%= "Available" %>
-        <% else %>
-          <%= "On Loan to #{book.on_loaned_to}" %>
-        <% end %>
-      </p>
-      <a href="/books/:id">look at this book</a>
+      <div class="book">
+        <h3><%= book.title %></h3>
+        <p>
+          by <%= book.author.name %><br>
+          <%= book.genre.name %><br>
+          Status:
+          <% if book.on_loaned_to == ""; %>
+            <%= "Available" %>
+          <% else %>
+            <%= "On Loan to #{book.on_loaned_to}" %>
+          <% end %>
+        </p>
+        <a href="/books/<%=book.id%>">view</a>
+      </div>
     <% end %>
   </div>
-
-  <div class="logout">
-    <a href="/logout">Log Out</a>
-  </div>
-
 
 <% else %>
   <a href="/">Home</a> <a href="/login">Log In</a> <a href="/signup">Sign Up</a>

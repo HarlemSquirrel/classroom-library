@@ -1,0 +1,25 @@
+<% if Helpers.is_logged_in?(@session) %>
+  <div class="books">
+    <h3><%= @book.title %></h3>
+    <p>
+      Author: <%= @book.author.name %><br>
+      Genre: <%= @book.genre.name %><br>
+      Status:
+      <% if @book.on_loaned_to == ""; %>
+        <%= '<span style="color:green">Available</span>' %>
+        <br><a href="#">LEND</a>
+      <% else %>
+        <%= '<span style="color:green">'"On Loan to #{book.on_loaned_to}"'</span>' %>
+        <br><a href="#">CHECK IN</a>
+      <% end %>
+    </p>
+    <a href="/books/<%=@book.id%>/edit">EDIT</a>
+
+  </div>
+
+  <div class="view_all_books">
+    <a href="/books">View All Books</a>
+  </div>
+<% else %>
+  <a href="/">Home</a> <a href="/login">Log In</a> <a href="/signup">Sign Up</a>
+<% end %>

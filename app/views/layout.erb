@@ -7,13 +7,20 @@
   </head>
   <body>
     <header>
-      <h1>Classroom Library</h1>
+      <% if Helpers.is_logged_in?(@session) %>
+        <h1><%= @user.username %>'s Library</h1>
+          <a href="/logout">Log Out</a>
+      <% else %>
+        <h1>Classroom Library</h1>
+      <% end %>
     </header>
 
     <%= yield %>
 
     <footer>
-      <h3><a href="/">Home</a></h3>
+      <h3>
+        <a href="/">Home</a>
+      </h3>
       <p>
         Crafted by <a href="https://github.com/HarlemSquirrel">HarlemSquirrel</a>
       </p>

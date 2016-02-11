@@ -10,13 +10,20 @@ class ApplicationController < Sinatra::Base
   end
 
   get '/' do
+    begin
+      Helpers.is_logged_in?(session)
+    rescue
+      session.clear
+    end
     @session = session
+    @user = @user = User.find(session[:id])
     erb :index
   end
 
   ################### users ###################
   get '/signup' do
     redirect to '/' if Helpers.is_logged_in?(session)
+    @session = session
     erb :'users/create_user'
   end
 
@@ -41,6 +48,7 @@ class ApplicationController < Sinatra::Base
 
   get '/login' do
     redirect to '/' if Helpers.is_logged_in?(session)
+    @session = session
     erb :'users/login'
   end
 
@@ -72,9 +80,53 @@ class ApplicationController < Sinatra::Base
 
   get '/books/new' do
     redirect to '/login' unless Helpers.is_logged_in?(session)
-    erb :'books/new'
+
+    @authors = Author.all
+    @genres = Genre.all
+    @session = session
+    #binding.pry
+    erb :'books/new_book'
+  end
+
+  post '/books' do
+
+    redirect to '/books/new' if params[:title] == ""
+
+    if params[:select_author] == "NEW"
+      redirect to '/books/new' if params[:new_author] == ""
+      author = Author.find_or_create(name: params[:new_author])
+    else
+      author = Author.find_by(name: params[:select_author])
+    end
+
+    if params[:select_genre] == "NEW"
+      redirect to '/books/new' if params[:new_genre] == ""
+      genre = Genre.find_or_create(name: params[:new_genre])
+    else
+      genre = Genre.find_by(name: params[:select_genre])
+    end
+    binding.pry
+    book = Book.create(
+      title: params[:title],
+      author: author,
+      genre: genre,
+      user: Helpers.current_user(session),
+      on_loaned_to: ""
+    )
+
+    redirect to "/books/#{book.id}"
+  end
+
+  get '/books/:id' do
+    redirect to '/login' unless Helpers.is_logged_in?(session)
+    @session = session
+    @book = Book.find(params[:id])
+    @user = User.find(session[:id])
+    erb :'books/show_book'
   end
 end
+
+
 
 
 class Helpers
