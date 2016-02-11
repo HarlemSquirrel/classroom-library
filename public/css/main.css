@@ -40,5 +40,6 @@ footer {
 
 div .book {
   display: inline-block;
-  width: auto;
+  width: 200px;
+  margin-bottom: 1%;
 }

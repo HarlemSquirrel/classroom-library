@@ -105,7 +105,7 @@ class ApplicationController < Sinatra::Base
     else
       genre = Genre.find_by(name: params[:select_genre])
     end
-    binding.pry
+
     book = Book.create(
       title: params[:title],
       author: author,
