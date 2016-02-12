@@ -5,17 +5,20 @@
       Author: <%= @book.author.name %><br>
       Genre: <%= @book.genre.name %><br>
       Status:
-      <% if @book.on_loan_to == ""; %>
+      <% if @book.on_loan_to == "" %>
         <%= '<span style="color:green">Available</span>' %>
-        <br><a href="/books/<%=@book.id%>/lend">LEND</a>
       <% else %>
         <%= '<span style="color:yellow">'"On Loan to #{@book.on_loan_to}"'</span>' %>
-        <br><a href="/books/<%=@book.id%>/return_book">RETURN</a>
       <% end %>
     </p>
 
     <form class="" action="/books/<%=@book.id%>/edit" method="get">
       <input type="submit" name="edit" value="Edit">
+      <% if @book.on_loan_to == "" %>
+        <input type="submit" formaction="/books/<%=@book.id%>/lend" name="name" value="Lend">
+      <% else %>
+        <input type="submit" formaction="/books/<%=@book.id%>/return_book" name="name" value="Return">
+      <% end %>
       <input type="submit" formaction="/books/<%=@book.id%>/delete" name="delete" value="Delete">
     </form>
 

@@ -12,7 +12,7 @@
           <% if book.on_loan_to == ""; %>
             <%= '<span style="color:green">Available</span>' %>
           <% else %>
-            <%= "On Loan to #{book.on_loan_to}" %>
+            <%= '<span style="color:yellow">'"On Loan to #{book.on_loan_to}"'</span>' %>
           <% end %>
         </p>
         <a href="/books/<%=book.id%>/edit">edit</a>
