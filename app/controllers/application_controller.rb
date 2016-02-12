@@ -33,6 +33,11 @@ class ApplicationController < Sinatra::Base
       flash[:error] = "All fields must be completed"
       redirect to '/signup'
     end
+
+    if !!User.find_by(username: params[:username])
+      flash[:error] = "There is already an account with this username"
+      redirect to '/signup'
+    end
     # create new user
     user = User.new(
       username: params[:username],
