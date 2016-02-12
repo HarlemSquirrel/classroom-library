@@ -5,10 +5,12 @@
       Author: <%= @book.author.name %><br>
       Genre: <%= @book.genre.name %><br>
       Status:
-      <% if @book.on_loan_to == "" %>
-        <%= '<span style="color:green">Available</span>' %>
+      <% if @book.on_loan_to == ""; %>
+        <span style="color:green">Available</span>
       <% else %>
-        <%= '<span style="color:yellow">'"On Loan to #{@book.on_loan_to}"'</span>' %>
+        <span style="color:yellow">
+          On Loan to <%=@book.on_loan_to%>
+        </span>
       <% end %>
     </p>
 
