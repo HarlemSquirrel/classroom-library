@@ -15,6 +15,7 @@
             <%= "On Loan to #{book.on_loaned_to}" %>
           <% end %>
         </p>
+        <a href="/books/<%=book.id%>/edit">edit</a>
         <a href="/books/<%=book.id%>">view</a>
       </div>
     <% end %>

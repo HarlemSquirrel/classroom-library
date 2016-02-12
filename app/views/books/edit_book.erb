@@ -26,6 +26,7 @@
       <input id="new_genre" type="text" name="new_genre" placeholder="or create a new genre..."><br>
 
       <input type="submit" name="submit" value="Update">
+      <input type="submit" name="cancel" formaction="/books/<%=@book.id%>" formmethod="get" value="Cancel">
     </form>
   </div>
 
