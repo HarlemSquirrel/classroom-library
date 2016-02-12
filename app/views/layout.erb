@@ -9,12 +9,24 @@
     <header>
       <% if Helpers.is_logged_in?(@session) %>
         <h1><%= @user.username %>'s Library</h1>
-          <a href="/logout">Log Out</a>
+          <nav>
+            <a href="/books/new">Add Book</a> |
+            <a href="/books">View All</a> |
+            <a href="/logout">Log Out</a>
+          </nav>
+
       <% else %>
         <h1>Classroom Library</h1>
+        <nav>
+          <a href="/">Home</a> |
+          <a href="/login">Log In</a> |
+          <a href="/signup">Sign Up</a> |
+        </nav>
       <% end %>
     </header>
-
+    <p class="flash_error">
+      <%= flash[:error] if flash[:error] %>
+    </p>
     <%= yield %>
 
     <footer>

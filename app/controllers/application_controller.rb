@@ -6,6 +6,7 @@ class ApplicationController < Sinatra::Base
     set :public_folder, 'public'
     set :views, 'app/views'
     enable :sessions
+    register Sinatra::Flash
     set :session_secret, "secret"
   end
 
@@ -16,7 +17,7 @@ class ApplicationController < Sinatra::Base
       session.clear
     end
     @session = session
-    @user = @user = User.find(session[:id])
+    @user = Helpers.current_user(session)
     erb :index
   end
 
@@ -29,6 +30,7 @@ class ApplicationController < Sinatra::Base
 
   post '/signup' do
     if params[:username] == "" || params[:email] == "" || params[:password] == ""
+      flash[:error] = "All fields must be completed"
       redirect to '/signup'
     end
     # create new user
@@ -42,6 +44,7 @@ class ApplicationController < Sinatra::Base
       session[:id] = user.id
       redirect '/'
     else
+      flash[:error] = "Something went wrong. Please try again."
       redirect '/signup'
     end
   end
@@ -58,7 +61,8 @@ class ApplicationController < Sinatra::Base
         session[:id] = user.id
         redirect '/'
     else
-        redirect '/login'
+      flash[:error] = "Your username or password is incorrect"
+      redirect '/login'
     end
   end
 
@@ -90,18 +94,28 @@ class ApplicationController < Sinatra::Base
 
   post '/books' do
 
-    redirect to '/books/new' if params[:title] == ""
+
+    if params[:title] == ""
+      flash[:error] = "You must enter a title"
+      redirect to '/books/new'
+    end
 
     if params[:select_author] == "NEW"
-      redirect to '/books/new' if params[:new_author] == ""
-      author = Author.find_or_create(name: params[:new_author])
+      if params[:new_author] == ""
+        flash[:error] = "Enter an author"
+        redirect to '/books/new'
+      end
+      author = Author.find_or_create_by(name: params[:new_author])
     else
       author = Author.find_by(name: params[:select_author])
     end
 
     if params[:select_genre] == "NEW"
-      redirect to '/books/new' if params[:new_genre] == ""
-      genre = Genre.find_or_create(name: params[:new_genre])
+      if params[:new_genre] == ""
+        flash[:error] = "Enter a genre"
+        redirect to '/books/new'
+      end
+      genre = Genre.find_or_create_by(name: params[:new_genre])
     else
       genre = Genre.find_by(name: params[:select_genre])
     end
@@ -114,7 +128,7 @@ class ApplicationController < Sinatra::Base
       on_loaned_to: ""
     )
 
-    redirect to "/books/#{book.id}"
+    redirect to "/books"
   end
 
   get '/books/:id' do
@@ -123,6 +137,21 @@ class ApplicationController < Sinatra::Base
     @book = Book.find(params[:id])
     @user = User.find(session[:id])
     erb :'books/show_book'
+  end
+
+  get '/books/:id/delete' do
+    redirect to '/login' unless Helpers.is_logged_in?(session)
+    @session = session
+    @book = Book.find(params[:id])
+    @user = User.find(session[:id])
+    erb :'books/delete_book'
+  end
+
+  post '/books/:id/delete' do
+    redirect to '/login' unless Helpers.is_logged_in?(session)
+    book = Book.find(params[:id])
+    book.delete
+    redirect to '/books'
   end
 
   get '/books/:id/edit' do
@@ -136,8 +165,36 @@ class ApplicationController < Sinatra::Base
   end
 
   patch '/books/:id' do
-    # update the book
-    # redirect to show page
+    if params[:title] == ""
+      flash[:error] = "Enter a title"
+      redirect to "/books/#{book.id}/edit"
+    end
+    book = Book.find(params[:id])
+
+    if params[:select_author] == "NEW"
+      if params[:new_author] == ""
+        flash[:error] = "Enter an author"
+        redirect to "/books/#{book.id}/edit"
+      end
+      author = Author.find_or_create_by(name: params[:new_author])
+    else
+      author = Author.find_by(name: params[:select_author])
+    end
+
+    if params[:select_genre] == "NEW"
+      if params[:new_genre] == ""
+        flash[:error] = "Enter a genre"
+        redirect to "/books/#{book.id}/edit"
+      end
+      genre = Genre.find_or_create_by(name: params[:new_genre])
+    else
+      genre = Genre.find_by(name: params[:select_genre])
+    end
+
+    book.title = params[:title]
+    book.author = author
+    book.genre = genre
+    book.save
     redirect to "/books/#{book.id}"
   end
 end
@@ -147,7 +204,7 @@ end
 
 class Helpers
   def self.current_user(session)
-    User.find(session[:id])
+    User.find(session[:id]) if session[:id]
   end
 
   def self.is_logged_in?(session)

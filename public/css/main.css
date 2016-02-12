@@ -43,3 +43,8 @@ div .book {
   width: 200px;
   margin-bottom: 1%;
 }
+
+.flash_error {
+  color: red;
+  text-align: center;
+}

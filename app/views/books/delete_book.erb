@@ -1,22 +1,20 @@
 <% if Helpers.is_logged_in?(@session) %>
   <div class="books">
-    <h3><%= @book.title %></h3>
+    <h2><span style="color:yellow">Do you really want to delete <%= @book.title %>?</span></h2>
     <p>
       Author: <%= @book.author.name %><br>
       Genre: <%= @book.genre.name %><br>
       Status:
       <% if @book.on_loaned_to == ""; %>
         <%= '<span style="color:green">Available</span>' %>
-        <br><a href="#">LEND</a>
       <% else %>
         <%= '<span style="color:green">'"On Loan to #{book.on_loaned_to}"'</span>' %>
-        <br><a href="#">CHECK IN</a>
       <% end %>
     </p>
 
-    <form class="" action="/books/<%=@book.id%>/edit" method="get">
-      <input type="submit" name="edit" value="Edit">
-      <input type="submit" formaction="/books/<%=@book.id%>/delete" name="delete" value="Delete">
+    <form class="" action="/books/<%=@book.id%>/delete" method="post">
+      <input type="submit" name="delete" value="Delete">
+      <input type="submit" formaction="/books/<%=@book.id%>" formmethod="get" name="cancel" value="Cancel">
     </form>
 
   </div>
