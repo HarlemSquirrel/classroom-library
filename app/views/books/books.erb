@@ -9,10 +9,10 @@
           by <%= book.author.name %><br>
           <%= book.genre.name %><br>
           Status:
-          <% if book.on_loaned_to == ""; %>
-            <%= "Available" %>
+          <% if book.on_loan_to == ""; %>
+            <%= '<span style="color:green">Available</span>' %>
           <% else %>
-            <%= "On Loan to #{book.on_loaned_to}" %>
+            <%= "On Loan to #{book.on_loan_to}" %>
           <% end %>
         </p>
         <a href="/books/<%=book.id%>/edit">edit</a>

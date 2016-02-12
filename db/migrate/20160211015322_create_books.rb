@@ -5,7 +5,7 @@ class CreateBooks < ActiveRecord::Migration
       t.integer :author_id
       t.integer :genre_id
       t.integer :user_id
-      t.string :on_loaned_to
+      t.string :on_loan_to
     end
   end
 end

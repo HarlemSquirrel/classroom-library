@@ -1,0 +1,23 @@
+<% if Helpers.is_logged_in?(@session) %>
+  <div class="books">
+    <h3>Lend <%= @book.title %>?</h3>
+    <p>
+      Author: <%= @book.author.name %><br>
+      Genre: <%= @book.genre.name %><br>
+    </p>
+
+    <form class="" action="/books/<%=@book.id%>/lend" method="post">
+      <input type="hidden" name="_method" value="patch">
+      <input type="text" name="lendee" placeholder="Lendee">
+      <input type="submit" name="lend" value="Lend">
+      <input type="submit" formaction="/books/<%=@book.id%>" formmethod="get" name="cancel" value="Cancel">
+    </form>
+
+  </div>
+
+  <div class="view_all_books">
+    <a href="/books">View All Books</a>
+  </div>
+<% else %>
+  <a href="/">Home</a> <a href="/login">Log In</a> <a href="/signup">Sign Up</a>
+<% end %>

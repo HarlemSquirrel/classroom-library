@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(version: 20160211020212) do
     t.integer "author_id"
     t.integer "genre_id"
     t.integer "user_id"
-    t.string  "on_loaned_to"
+    t.string  "on_loan_to"
   end
 
   create_table "genres", force: :cascade do |t|

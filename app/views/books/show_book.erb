@@ -5,12 +5,12 @@
       Author: <%= @book.author.name %><br>
       Genre: <%= @book.genre.name %><br>
       Status:
-      <% if @book.on_loaned_to == ""; %>
+      <% if @book.on_loan_to == ""; %>
         <%= '<span style="color:green">Available</span>' %>
-        <br><a href="#">LEND</a>
+        <br><a href="/books/<%=@book.id%>/lend">LEND</a>
       <% else %>
-        <%= '<span style="color:green">'"On Loan to #{book.on_loaned_to}"'</span>' %>
-        <br><a href="#">CHECK IN</a>
+        <%= '<span style="color:yellow">'"On Loan to #{@book.on_loan_to}"'</span>' %>
+        <br><a href="/books/<%=@book.id%>/return_book">RETURN</a>
       <% end %>
     </p>
 

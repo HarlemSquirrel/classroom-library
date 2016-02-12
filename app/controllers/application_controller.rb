@@ -133,7 +133,7 @@ class ApplicationController < Sinatra::Base
       author: author,
       genre: genre,
       user: Helpers.current_user(session),
-      on_loaned_to: ""
+      on_loan_to: ""
     )
 
     redirect to "/books"
@@ -172,6 +172,26 @@ class ApplicationController < Sinatra::Base
     erb :'books/edit_book'
   end
 
+  get '/books/:id/lend' do
+    redirect to '/login' unless Helpers.is_logged_in?(session)
+    @session = session
+    @book = Book.find(params[:id])
+    @user = User.find(session[:id])
+    @authors = Author.all
+    @genres = Genre.all
+    erb :'books/lend_book'
+  end
+
+  get '/books/:id/return_book' do
+    redirect to '/login' unless Helpers.is_logged_in?(session)
+    @session = session
+    @book = Book.find(params[:id])
+    @user = User.find(session[:id])
+    @authors = Author.all
+    @genres = Genre.all
+    erb :'books/return_book'
+  end
+
   patch '/books/:id' do
     if params[:title] == ""
       flash[:error] = "Enter a title"
@@ -204,6 +224,26 @@ class ApplicationController < Sinatra::Base
     book.genre = genre
     book.save
     redirect to "/books/#{book.id}"
+  end
+
+  patch '/books/:id/lend' do
+    lendee = params[:lendee]
+    book = Book.find(params[:id])
+    if lendee == ""
+      flash[:error] = "You need to enter a lendee"
+      redirect to "/books/#{book.id}/lend"
+    end
+
+    book.on_loan_to = lendee
+    book.save
+    redirect to '/books'
+  end
+
+  patch '/books/:id/return_book' do
+    book = Book.find(params[:id])
+    book.on_loan_to = ""
+    book.save
+    redirect to '/books'
   end
 end
 
