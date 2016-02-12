@@ -37,6 +37,9 @@ class ApplicationController < Sinatra::Base
     if !!User.find_by(username: params[:username])
       flash[:error] = "There is already an account with this username"
       redirect to '/signup'
+    elsif !!User.find_by(email: params[:email])
+      flash[:error] = "There is already an account with this email"
+      redirect to '/signup'
     end
     # create new user
     user = User.new(
