@@ -1,9 +1,12 @@
+@import url(https://fonts.googleapis.com/css?family=Oswald);
+
 a:link, a:visited { color: lightgray; }
-a:hover { color: lightblue; }
-a:active { color: blue; }
+a:hover { color: #df80ff; }
+a:active { color: #bf00ff; }
 
 body {
   background-color: #660066;
+  font-family: 'Oswald', sans-serif;
 }
 
 div {
@@ -17,14 +20,16 @@ div {
 }
 
 header {
+  font-size: 2em;
+  line-height: 1em;
   text-align: center;
-  margin-bottom: 1%;
+  text-shadow: 5px 5px 5px gray;
+  margin-bottom: auto;
 }
 
-header h1 {
-  font-size: 4em;
-  line-height: 10%;
-  text-shadow: 2px 2px gray;
+nav {
+  text-align: center;
+  margin-bottom: -10px;
 }
 
 footer {
