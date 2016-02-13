@@ -10,6 +10,7 @@
       <% if Helpers.is_logged_in?(@session) %>
         <h1><%= @user.username %>'s Library</h1>
           <nav>
+            <hr>
             <a href="/books/new">Add Book</a> |
             <a href="/books">View All</a> |
             <a href="/logout">Log Out</a>
